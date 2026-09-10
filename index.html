@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<title>Micro-Jection 계약협상 · 회의 진행표</title>
+<style>
+  :root{
+    --bg:#f4f6f9; --panel:#ffffff; --line:#d8dee7; --line2:#e8edf3;
+    --ink:#12161c; --ink2:#454f5c; --ink3:#6b7684;
+    --accent:#1a4fd6; --accent-soft:#eaf0ff;
+    --red:#c62828; --red-soft:#fdecec;
+    --amber:#a06a00; --amber-soft:#fff5e0;
+    --green:#0e7a3c; --green-soft:#e6f6ec;
+    --purple:#6b2fb5; --purple-soft:#f2ebfd;
+    --fs:19px;
+  }
+  *{box-sizing:border-box}
+  html{font-size:var(--fs)}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"Pretendard","Malgun Gothic","맑은 고딕",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    line-height:1.62; -webkit-text-size-adjust:100%;
+  }
+
+  /* ---------- top bar ---------- */
+  header{
+    position:sticky; top:0; z-index:50; background:#fff;
+    border-bottom:2px solid var(--line);
+    box-shadow:0 2px 14px rgba(20,30,50,.07);
+  }
+  .bar{max-width:1680px; margin:0 auto; padding:.7rem 1.1rem; display:flex; align-items:center; gap:1rem; flex-wrap:wrap}
+  .brand{display:flex; flex-direction:column; margin-right:auto}
+  .brand h1{margin:0; font-size:1.35rem; letter-spacing:-.02em}
+  .brand .sub{font-size:.82rem; color:var(--ink3); font-weight:600}
+  .stats{display:flex; gap:.45rem; align-items:center; flex-wrap:wrap}
+  .pill{
+    font-size:.82rem; font-weight:800; padding:.3rem .7rem; border-radius:999px;
+    border:1.5px solid var(--line); background:#fff; color:var(--ink2); white-space:nowrap;
+  }
+  .pill.ok{background:var(--green-soft); border-color:#a9dcbd; color:var(--green)}
+  .pill.hold{background:var(--amber-soft); border-color:#f0d091; color:var(--amber)}
+  .pill.re{background:var(--red-soft); border-color:#f3b9b9; color:var(--red)}
+  .btns{display:flex; gap:.4rem; flex-wrap:wrap}
+  button.act{
+    font-family:inherit; font-size:.86rem; font-weight:800; cursor:pointer;
+    padding:.5rem .85rem; border-radius:10px; border:1.5px solid var(--line);
+    background:#fff; color:var(--ink2);
+  }
+  button.act:hover{background:#f1f4f8}
+  button.act.primary{background:var(--accent); border-color:var(--accent); color:#fff}
+  button.act.primary:hover{filter:brightness(1.08)}
+  button.act.danger{color:var(--red); border-color:#f0c2c2}
+  .saved{font-size:.78rem; color:var(--ink3); font-weight:700; min-width:9.5rem}
+
+  /* ---------- layout ---------- */
+  main{max-width:1680px; margin:0 auto; padding:1.1rem 1.1rem 5rem}
+
+  .memoboard{
+    background:#fff; border:2px solid var(--accent); border-radius:14px;
+    padding:.9rem 1rem; margin-bottom:1.1rem;
+  }
+  .memoboard h2{margin:0 0 .5rem; font-size:1.05rem; color:var(--accent); letter-spacing:-.01em}
+  .memoboard textarea{min-height:110px}
+
+  /* ---------- accordion ---------- */
+  section.acc{
+    background:var(--panel); border:1.5px solid var(--line); border-radius:14px;
+    margin-bottom:.75rem; overflow:hidden;
+  }
+  .acc > .head{
+    width:100%; display:flex; align-items:center; gap:.8rem; cursor:pointer;
+    padding:1rem 1.1rem; background:#fbfcfe; border:0; font-family:inherit;
+    text-align:left; color:var(--ink);
+  }
+  .acc > .head:hover{background:#f3f6fb}
+  .acc[open] > .head{background:#eef3fb; border-bottom:1.5px solid var(--line2)}
+  .chev{font-size:1.05rem; color:var(--ink3); transition:transform .15s; flex:none}
+  .acc[open] .chev{transform:rotate(90deg)}
+  .head .t{font-size:1.28rem; font-weight:800; letter-spacing:-.02em; margin-right:auto}
+  .head .cnt{font-size:.8rem; font-weight:800; color:var(--ink3); background:#fff;
+    border:1.5px solid var(--line); border-radius:999px; padding:.2rem .6rem; flex:none}
+  .body{padding:.4rem .8rem 1rem}
+
+  /* ---------- item ---------- */
+  .item{
+    display:grid; grid-template-columns:minmax(0,1fr) 400px; gap:1rem;
+    padding:1rem .55rem; border-bottom:1.5px dashed var(--line2);
+  }
+  .item:last-child{border-bottom:0}
+  .item.done{background:linear-gradient(90deg,var(--green-soft),transparent 65%)}
+  .item.hold{background:linear-gradient(90deg,var(--amber-soft),transparent 65%)}
+  .item.re{background:linear-gradient(90deg,var(--red-soft),transparent 65%)}
+
+  .no{font-size:.82rem; font-weight:900; color:#fff; background:var(--ink3);
+    border-radius:7px; padding:.1rem .5rem; margin-right:.5rem}
+  .tag{font-size:.76rem; font-weight:900; padding:.15rem .55rem; border-radius:7px;
+    margin-right:.45rem; white-space:nowrap; display:inline-block; vertical-align:2px}
+  .tag.d{background:var(--accent-soft); color:var(--accent)}
+  .tag.c{background:var(--purple-soft); color:var(--purple)}
+  .tag.w{background:var(--red-soft); color:var(--red)}
+  .tag.k{background:var(--green-soft); color:var(--green)}
+  .tag.s{background:var(--amber-soft); color:var(--amber)}
+
+  .it-t{font-size:1.13rem; font-weight:800; letter-spacing:-.01em; margin:0 0 .4rem}
+  .it-d{font-size:.97rem; color:var(--ink2); margin:0}
+  .it-d ul{margin:.35rem 0 0; padding-left:1.15rem}
+  .it-d li{margin:.16rem 0}
+  .it-d b{color:var(--ink)}
+  .it-d .x{color:var(--red); font-weight:800}
+  .it-d .o{color:var(--green); font-weight:800}
+  .quote{
+    margin:.5rem 0 0; padding:.5rem .75rem; background:#f7f9fc;
+    border-left:4px solid var(--line); border-radius:0 8px 8px 0;
+    font-size:.93rem; color:var(--ink2); white-space:pre-wrap;
+  }
+  .rec{
+    margin-top:.55rem; display:inline-block; font-size:.95rem; font-weight:800;
+    background:var(--accent-soft); color:var(--accent);
+    border:1.5px solid #c3d4ff; border-radius:9px; padding:.28rem .7rem;
+  }
+  .opts{margin-top:.5rem; display:flex; gap:.35rem; flex-wrap:wrap}
+  .opt{
+    font-family:inherit; font-size:.92rem; font-weight:700; cursor:pointer;
+    padding:.32rem .7rem; border-radius:9px; border:1.5px solid var(--line);
+    background:#fff; color:var(--ink2);
+  }
+  .opt:hover{border-color:var(--accent); color:var(--accent)}
+  .opt.on{background:var(--accent); border-color:var(--accent); color:#fff}
+
+  /* ---------- memo side ---------- */
+  .side{display:flex; flex-direction:column; gap:.45rem; min-width:0}
+  .status{display:flex; gap:.3rem}
+  .st{
+    flex:1; font-family:inherit; font-size:.86rem; font-weight:800; cursor:pointer;
+    padding:.42rem .2rem; border-radius:9px; border:1.5px solid var(--line);
+    background:#fff; color:var(--ink3);
+  }
+  .st:hover{background:#f1f4f8}
+  .st[data-v="done"].on{background:var(--green); border-color:var(--green); color:#fff}
+  .st[data-v="hold"].on{background:var(--amber); border-color:var(--amber); color:#fff}
+  .st[data-v="re"].on{background:var(--red); border-color:var(--red); color:#fff}
+  textarea{
+    font-family:inherit; font-size:.97rem; line-height:1.55; color:var(--ink);
+    width:100%; min-height:108px; resize:vertical; padding:.6rem .7rem;
+    border:1.5px solid var(--line); border-radius:10px; background:#fffdf5;
+  }
+  textarea:focus{outline:none; border-color:var(--accent); background:#fff;
+    box-shadow:0 0 0 3px rgba(26,79,214,.13)}
+  textarea::placeholder{color:#a9b3c0}
+
+  .foot{margin-top:1.5rem; font-size:.85rem; color:var(--ink3); text-align:center}
+
+  @media (max-width:1180px){
+    .item{grid-template-columns:1fr}
+    .side{border-top:1.5px solid var(--line2); padding-top:.6rem}
+  }
+  @media print{
+    header{position:static} .btns,.opts{display:none} .acc{break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="bar">
+    <div class="brand">
+      <h1>Micro-Jection 특허 독점계약 · 회의 진행표</h1>
+      <div class="sub">배랩(배원규 · 김수정) ↔ 후아스튜디오 / 크리에이티브 비범 · 2026.05</div>
+    </div>
+    <div class="stats" id="stats"></div>
+    <div class="btns">
+      <button class="act" onclick="allOpen(true)">전체 펼치기</button>
+      <button class="act" onclick="allOpen(false)">전체 접기</button>
+      <button class="act primary" onclick="exportHTML()">HTML로 저장</button>
+      <button class="act" onclick="window.print()">인쇄 / PDF</button>
+      <button class="act danger" onclick="resetAll()">초기화</button>
+    </div>
+    <div class="saved" id="saved">—</div>
+  </div>
+</header>
+
+<main>
+  <div class="memoboard">
+    <h2>🗒 종합 메모 · 합의 요약</h2>
+    <textarea id="global" placeholder="회의 전체 흐름, 결론, 다음 액션을 여기에 적으세요."></textarea>
+  </div>
+  <div id="app"></div>
+  <div class="foot">
+    로컬(브라우저)에 자동 저장됩니다 · 회의 종료 후 <b>HTML로 저장</b>을 눌러 결과 파일을 보관하세요<br>
+    ⚖️ 최종 조항 확정은 기술이전·라이선싱 전문 변호사 검토 필요
+  </div>
+</main>
+
+<script id="snapshot" type="application/json">null</script>
+<script>
+/* =========================================================
+   DATA
+   tag: d=결정  c=확인  w=주의  k=유지/합의됨  s=전략
+   ========================================================= */
+const DATA = [
+{
+  id:"goal", title:"🎯 미팅 목표 · 협상 프레임", open:true,
+  items:[
+    {tag:"s", t:"오늘 회의에서 반드시 얻을 것 3가지",
+     d:`<ul>
+        <li><b>① 구조 합의</b> — 1차 6개월(출시 검증) + 본계약 2년 자동전환</li>
+        <li><b>② 실행 확약</b> — 화장품 전담팀(사업총괄·BM·운영) 14일 내 지정</li>
+        <li><b>③ 숫자 조율</b> — MG 수준, 1차 의무 발주액, 독점 자동상실선</li>
+      </ul>`},
+    {tag:"s", t:"협상 기본 프레임 — Hard term 양보 / Soft term 강화",
+     d:`금액에서는 양보하되 <b>실행력(전담팀·마일스톤·출시 검증)</b>으로 묶는 win-win 구조.
+        상대 부담을 낮춰 결렬을 막고, 실제로는 실행 미달 시 <b>자동 종료</b>로 배랩 리스크를 최소화한다.`},
+    {tag:"k", t:"양보 가능 (Soft)",
+     d:`<ul>
+        <li>MG 금액 — 5억 → 1차 2억 / 2차 3.5억 수준</li>
+        <li>계약기간 분리 — 6개월 + 2년</li>
+        <li>2년 발주액도 5억보다 낮은 금액 수용 가능</li>
+      </ul>`},
+    {tag:"w", t:"양보 불가 (Hard) — 8개",
+     d:`<ul>
+        <li>제조원가 <b>25% 마진</b> 공급 구조</li>
+        <li>MG 미달 시 독점 → <b>통상실시 자동 전환</b></li>
+        <li>브랜드 전담팀 지정 (계약 후 14일 내)</li>
+        <li>브랜드·제품 스펙 부속서 확정</li>
+        <li><span class="o">"자연모사공학자 배원규 교수"</span> OK / <span class="x">"숭실대"</span> 표현 금지</li>
+        <li>마이크로젝션 상표 = 배랩 소유 (License만 부여)</li>
+        <li>배원규 개인 = A-1 공동 당사자</li>
+        <li>에스테틱·피부과 채널 배랩 100% 독자권</li>
+      </ul>`},
+    {tag:"s", t:"계약 문서 구조",
+     d:`<div class="quote">[선행] MOU 독점협상 합의서 (2주) — 선택적
+  ↓
+[본계약] Master Agreement
+  · 권리·의무의 틀 / 제조원가 25% 마진
+  · 1차 6개월 → 본계약 2년 자동전환 메커니즘
+  ↓
+[부속서 A] 1차 6개월용 ★ 후아 작성
+  · 브랜드·제품 스펙 / 전담팀 지정 / 마일스톤 / 1차 의무 발주액 / "출시 완료" 정의
+  ↓ (출시 완료 시)
+[부속서 B] 2년 사업화 부속서
+  · 조정된 MG / 품목별 공급단가 / 채널·물량 계획</div>`}
+  ]
+},
+{
+  id:"money", title:"💰 사전 결정 시트 ① 금액 · 조건", open:true,
+  items:[
+    {n:1, tag:"k", t:"기술료율", d:"적용 제품 공급가에 <b>제조원가의 25%</b>에 해당하는 기술료 포함. 구체적 공급단가는 부속합의서.",
+     rec:"제조원가 25% (구두 합의) — 유지", opts:["25% 유지","20%로 조정","기타"]},
+    {n:2, tag:"d", t:"1차 계약기간", d:"브랜드·제품 <b>출시 완료</b>를 검증하는 기간. 미달 시 자동 종료(위약금 없음).",
+     rec:"6개월 (180일)", opts:["6개월","9개월","12개월"]},
+    {n:3, tag:"d", t:"본계약 사업화기간", d:"1차 계약기간 종료 시 출시 완료 요건 충족되면 <b>자동 전환</b>.",
+     rec:"24개월 (2년)", opts:["2년","3년"]},
+    {n:4, tag:"d", t:"MG 1차연도 (본계약)", d:"사업화 1차연도 최소 발주 보장액. 미달분은 계약연도 종료 후 30일 내 현금 정산(Take-or-Pay).",
+     rec:"2억원", opts:["1.5억","2억","2.5억","3억","기타"]},
+    {n:5, tag:"d", t:"MG 2차연도 (본계약)", d:"원안은 연 5억. 상대 부담을 고려해 하향 조정 용의 있음.",
+     rec:"3.5억원", opts:["3억","3.5억","5억(원안)","기타"]},
+    {n:6, tag:"w", t:"독점 자동상실선 ★핵심★",
+     d:`어느 계약연도 최소 발주액의 <b>[N]%에 미달</b>하거나 부족분 미지급 시,
+        A의 <b>서면 통지 한 장으로</b> 독점권 → 통상실시권 자동 전환.
+        <div class="quote">"계약만 하고 발주 안 함"을 막는 직접 해결책. 소송 없이 독점 해제 가능.</div>`,
+     rec:"70%", opts:["60%","70%","80%"]},
+    {n:7, tag:"d", t:"1차 의무 발주액 (Minimum First PO)", d:"계약 후 120일 내 1차 양산 발주 시 최소 발주 금액.",
+     rec:"5천만원", opts:["3천만","5천만","7천만","1억","기타"]},
+    {n:8, tag:"d", t:'"출시 완료" 누적 매출 기준',
+     d:`<b>출시 완료(Launch)</b> = 다음 3가지 모두 충족:
+        <ul><li>자사몰 또는 정규 유통 채널 정식 판매 개시</li>
+        <li>6개월 내 누적 <b>[N]원 이상</b> 실판매 (배랩 공급가 기준)</li>
+        <li>1차 의무 발주(PO) 완료</li></ul>`,
+     rec:"5천만원", opts:["3천만","5천만","1억","기타"]}
+  ]
+},
+{
+  id:"sched", title:"📅 사전 결정 시트 ② 일정 · 마일스톤", open:false,
+  items:[
+    {n:9, tag:"w", t:"화장품 전담팀 지정 기한 ★최우선★",
+     d:`사업총괄(Project Lead) · 브랜드 매니저 · 운영 담당자 <b>성명·직책·연락처</b> 서면 통지.
+        1차 6개월간 본 프로젝트에 주된 업무로 종사, 정당한 사유 없이 교체 불가.
+        A는 역량·경력 자료(이력서 수준) 요구 가능.`,
+     rec:"계약 후 14일", opts:["7일","14일","21일"]},
+    {n:10, tag:"d", t:"브랜드명 · 컨셉 확정 기한", d:"브랜드명, 컨셉, 포지셔닝, 로고/CI 방향.", rec:"계약 후 30일", opts:["21일","30일","45일"]},
+    {n:11, tag:"d", t:"로고 · CI 시안 확정", d:"", rec:"계약 후 45일", opts:["30일","45일","60일"]},
+    {n:12, tag:"d", t:"상표 출원 (필요시)", d:"", rec:"계약 후 60일", opts:["45일","60일","90일"]},
+    {n:13, tag:"d", t:"제품 사양 · 수량 · 규격 확정", d:"각 제품 용량·제형·성분 방향·디바이스 사양. 이후 A는 30일 내 1차 샘플(처방) 제출.", rec:"계약 후 60일", opts:["45일","60일","90일"]},
+    {n:14, tag:"d", t:"패키지 디자인 확정", d:"용기·박스 컨셉 (1단계 크림 용기 수급 포함).", rec:"계약 후 90일", opts:["75일","90일","105일"]},
+    {n:15, tag:"d", t:"1차 양산 발주서(PO) 발행", d:"발주 후 협의된 리드타임 내 A가 양산품 납품.", rec:"계약 후 120일", opts:["100일","120일","135일"]},
+    {n:16, tag:"d", t:"정식 출시", d:"가을(9월 이후) 런칭 목표와 정합.", rec:"계약 후 180일 (6개월)", opts:["150일","180일","210일"]},
+    {tag:"w", t:"지연에 대한 책임 (제9-2조 ⑥)",
+     d:`<ul>
+        <li>B 귀책으로 마일스톤 <b>30일 이상 지연</b> → A는 서면 시정 최고 → 15일 내 미이행 시 독점권을 통상실시권으로 전환</li>
+        <li>A 또는 OEM 제조사 귀책(샘플 지연 등)으로 인한 지연은 해당 일정에서 제외</li>
+        <li><b>상호주의</b> — A도 동일한 마일스톤 책임을 진다</li>
+      </ul>`}
+  ]
+},
+{
+  id:"etc", title:"📝 사전 결정 시트 ③ 기타 조건", open:false,
+  items:[
+    {n:17, tag:"d", t:"초상권 · 성명권 사용료 방식",
+     d:`배원규 개인의 초상권·성명권은 <b>양도 불가 인격권</b>. 사용 매체·지역·기간 특정 + 사용 전 서면 승인 필수.`,
+     rec:"혼합 (정액 + 매출%) ★권고", opts:["월정액 (200~500만)","매출 1~3%","혼합(권고)","기타"]},
+    {n:18, tag:"d", t:"자동연장 조항", d:"본계약 만료 3개월 전까지 어느 일방의 서면 종료 의사가 없으면 동일 조건 1년 자동 연장. 단, 갱신은 제9조 제5항(직전 연도 MG 달성 + 부족분 정산 완료) 요건 충족 시에만.",
+     rec:"1년 자동연장 (MG 달성 조건부)", opts:["도입","미도입"]},
+    {n:19, tag:"k", t:"비밀유지 기간", d:"단, <b>학술 예외</b> 추가 — A의 학술·연구 목적 논문/학회 발표는 영업비밀(원가·거래조건) 제외하고 제한받지 않음.",
+     rec:"종료 후 5년 (유지) + 학술 예외", opts:["3년","5년 유지"]}
+  ]
+},
+{
+  id:"portrait", title:"🔴 초상권 · 마케팅 표현 규칙 (매우 중요)", open:false,
+  items:[
+    {tag:"w", t:"왜 중요한가",
+     d:`숭실대로부터 <b>개인 이전받은 특허</b>를 활용하는 것으로 대학과 수익을 공유하지 않음.
+        따라서 대학 명칭을 직함과 결합해 마케팅하면, 대학이 명칭 무단 상업적 사용 또는 수익 배분을 문제 삼을 빌미가 된다.`},
+    {tag:"k", t:"✅ 허용 표현",
+     d:`<ul><li><b class="o">"자연모사공학자 배원규 교수"</b></li>
+        <li>배원규 교수 초상권 사용 (사전 서면동의 전제)</li>
+        <li>연구 스토리 활용 — snake fang 논문, 중앙일보 2020 보도</li></ul>`},
+    {tag:"w", t:"❌ 금지 표현",
+     d:`<ul><li><b class="x">"숭실대(학교) 교수"</b></li>
+        <li>대학·소속 기관 명칭을 직함과 결합한 일체의 마케팅</li>
+        <li>의학적 효능·치료를 연상시키는 허위·과장 표현</li></ul>
+        위반 시 A-1은 즉시 사용 중단·정정 요구 및 손해배상 청구 가능.`},
+    {tag:"d", t:"명문화 위치", d:"<b>본계약 제14조 제3항 + 별첨1 호칭 가이드라인</b>에 반드시 명문화."},
+    {tag:"d", t:"상표 · 계약종료 후 사용",
+     d:`Micro-Jection(마이크로젝션) 상표 및 관련 IP는 <b>A(또는 배원규)에게 귀속</b>, B에게는 계약 기간 중 사용 허락(License)만.
+        계약 종료 시 상표·성명·초상·연구 스토리 사용 즉시 중단, 잔여 재고는 <b>종료일로부터 90일</b> 이내 소진.`}
+  ]
+},
+{
+  id:"party", title:"🏢 당사자 · 권리 구조", open:false,
+  items:[
+    {tag:"w", t:"A-1 (배원규 개인) 공동 당사자 추가",
+     d:`특허 3건은 <b>배원규·배랩 공유</b>, 초상권은 양도불가 인격권 → 배원규 개인을 반드시 공동 당사자로 추가하고 서명란 신설.`},
+    {tag:"w", t:"배랩 대표자명 정정",
+     d:`원문의 "배원규"는 오기 → <b>김수정</b>으로 정정 (서명란 포함).`},
+    {tag:"c", t:"B 법인 정체 확인",
+     d:`<ul><li>후아스튜디오가 정문섭 대표의 실제 운영 법인 맞는지</li>
+        <li>뉴트리케어와의 관계 (하정인 팀장은 뉴트리케어 소속)</li>
+        <li>대표자명 정확한 표기 — <b>정운섭 vs 정문섭</b> (최근 원문에는 "정운섭")</li>
+        <li>합병체 "크리에이티브 비범"(후아 + 허니비 스튜디오)과의 관계</li>
+        <li>호주 패밀리링크 JV 신설 시 계약 승계 처리</li></ul>`},
+    {tag:"c", t:"숭실대 → 배원규 양도계약 확인 (서명 전 필수)",
+     d:`<ul><li>직무발명 잔존권리 유무</li><li>사용 분야(field-of-use)·지역 제한 유무</li>
+        <li>제3자 실시허락 시 대학 통지·동의 의무</li><li>양도 대가(기술료 일부 환원 등) 조건</li></ul>`},
+    {tag:"k", t:"계약 대상 외 (배랩 독자 영역)",
+     d:`<ul><li>두피 라인 (모제림 등 협력 중)</li><li>엑소토카인 앰플 라인</li>
+        <li>에스테틱·피부과 채널 — <b>배랩 100% 독자권</b> (사전 승인 아닌 <b>사전 통지</b>로 충분)</li></ul>`},
+    {tag:"k", t:"특허 3건 (별첨1)",
+     d:`<ul><li>특허 1 · 10-1746747-0000 — 모세관력을 이용하여 약물 전달성을 향상시킨 마이크로니들 시스템</li>
+        <li>특허 2 · 10-2088330-0000 — 마이크로 구조물의 피부 흡수 촉진제, 피부도포 인슐린 및 투여방법</li>
+        <li>특허 3 · 10-2080860-0000 — 미세구조의 피부 흡수 증강제, 국소마취제 및 마취방법</li></ul>
+        전부 <b>배원규·배랩 공유</b>. Micro-Jection 등록상표는 배랩 소유.`}
+  ]
+},
+{
+  id:"ask", title:"🟡 후아 측에 답변받을 사항", open:false,
+  items:[
+    {tag:"c", t:"B 법인 정체 · 대표자 성명", d:"후아스튜디오 = 정문섭 대표 회사? 뉴트리케어와의 관계? 정운섭/정문섭 정확한 표기?"},
+    {tag:"c", t:"화장품 사업 전담팀 ★", d:"사업총괄 · 브랜드 매니저(BM) · 운영담당 — <b>누구로 지정 가능한가</b>. 성명·직책·연락처·경력."},
+    {tag:"c", t:"화장품 책임판매업자 등록 주체", d:"후아가 부담하는 데 동의하는가."},
+    {tag:"c", t:"제조물책임(PL)보험", d:"가입 주체·범위. B가 가입하고 A 및 배원규 개인을 면책하는 구조."},
+    {tag:"c", t:"호주 패밀리링크 20억 펀딩 진행 상황", d:"확정/진행률/집행 시점."},
+    {tag:"c", t:"JV 신설 가능성 · 시기", d:"신설 시 본 계약의 승계 방식."},
+    {tag:"c", t:"셀럽 출연 확약 상태", d:"서인영 · 한혜진 등 — 구두인가 계약인가."},
+    {tag:"c", t:"이성노 PD 콘텐츠 기획서 · 제작 인프라", d:"벤치마킹: 너세린 브랜드(유튜브 콘텐츠만으로 단기간 성공)."},
+    {tag:"c", t:"크레오 2단계 디바이스 양산 견적서", d:"이지듀 납품용 기존 모델 외형 수정 기준."},
+    {tag:"c", t:"2026년 사업계획 · 예상 매출 · 마케팅 예산", d:""},
+    {tag:"c", t:"3단계 디바이스 금형비 분담 비율", d:"독사어금니 모사 디바이스 — 신규 금형, 브랜드 핵심 전략 모델."}
+  ]
+},
+{
+  id:"clause", title:"📜 계약서 조문별 쟁점 (원문 vs 수정 권고)", open:false,
+  items:[
+    {tag:"w", t:"제3조 (정의) — 적용 제품 범위가 너무 넓음",
+     d:`<div class="quote">원문: "직접 또는 간접으로 적용되거나 효과·표현·원리·구조를 이용하여 제조되는 모든 화장품…"</div>
+        <b>수정:</b> "별첨1 등록특허 3건의 <b>청구범위를 직접 실시</b>하거나 그 기술적 특징을 <b>직접 적용</b>하여 개발·제조되는 화장품 및 뷰티 디바이스"
+        + 배랩이 독자 보유·개발한 제품은 제외 명시.`},
+    {tag:"d", t:"제3조 — 제외 채널 단서 완화",
+     d:`원문 "상호 <b class="x">사전 승인</b>" → "<b class="o">사전 통지</b>(Notification)로 충분". 에스테틱 채널 배랩 100% 독자권 보장.`},
+    {tag:"d", t:"제3조 — 개량기술 정의 한정",
+     d:`"<b>직접적으로 기초</b>"로 한정. A 소속 기관·학생·연구원의 독자 연구성과 및 별첨1 특허와 독립된 연구는 제외.`},
+    {tag:"w", t:"제4조 (독점권 부여)",
+     d:`<ul><li><b>4.1항</b> — MG 이행을 조건으로 한 독점. 미달 시 통상실시 자동 전환 단서 추가</li>
+        <li><b>4.5항 삭제 ★</b> — "기존 거래 업무 일체를 B에게 이관"은 <b class="x">사실상의 사업 양도</b>.
+        대체: 본 계약은 별첨1 특허를 직접 적용한 신규 제품에만 적용, A의 기존 거래관계는 유지</li></ul>`},
+    {tag:"d", t:"제6조 (B의 독점 판매회사 지위)",
+     d:`모든 항에 "<b>허용 채널에 한하여 적용</b>" 단서 추가 — 제외 채널·기존 거래에서 A 영업 자유 보장.`},
+    {tag:"d", t:"제7조 (A의 의무)",
+     d:`<ul><li>6호: "사전 승인" → "<b>사전 통지</b>"로 완화</li>
+        <li>3호(식약처): 최종 인허가·심의 적합성 책임은 <b>책임판매업자 B</b>에게</li></ul>`},
+    {tag:"d", t:"제8조 (B의 의무) — 신설 조항",
+     d:`<div class="quote">B는 화장품 책임판매업자로서 식약처 규제 준수, 광고 심의, 제조물책임(PL)에 대한 책임을 부담하며, 이와 관련하여 A 및 배원규 개인에게 손해가 발생하지 않도록 면책한다. B는 적용 제품에 대한 PL보험에 가입한다.</div>
+        + MG 이행 의무 명시.`},
+    {tag:"w", t:"★ 제9조 (기술료 및 최소발주보장) — 가장 위험한 조항",
+     d:`<div class="quote">원문: "연간 기술료 최소금액은 <b>0원</b>으로 정한다"
+→ B가 한 푼도 발주하지 않아도 계약 위반이 아님. MG의 정반대.</div>
+        <b>수정안 = Take-or-Pay + 자동상실 3중 장치</b>
+        <ul><li>① 기술료: 제조원가 25%</li>
+        <li>② MG: 1차연도 2억 / 2차연도 3.5억</li>
+        <li>③ 부족분 정산: 연도 종료 후 30일 내 현금 지급</li>
+        <li>④ <b>독점권 자동 상실</b>: MG의 70% 미달 또는 부족분 미지급 시 서면 통지로 통상실시 전환</li>
+        <li>⑤ 갱신 요건: 직전 연도 MG 달성 + 정산 완료 시에만 B가 갱신 요구 가능</li></ul>`},
+    {tag:"w", t:"★ 제9-2조 (신설) — 1차 6개월 + 본계약 자동전환",
+     d:`<ul><li>① 역할 분담 — 기획·브랜딩·마케팅 = B / 개발·생산 = A 및 A 지정 OEM</li>
+        <li>② 화장품 전담조직 14일 내 지정 (교체 시 14일 전 통지 + 동등 이상 후임)</li>
+        <li>③ 마일스톤 30/45/60/90/120/180일</li>
+        <li>④ 1차 의무 최소 발주 5천만원</li>
+        <li>⑤ "출시 완료" 3요건 정의</li>
+        <li>⑥ 지연 책임 (상호주의)</li>
+        <li>⑦ <b>자동 종료 / 자동 전환</b> — 180일 내 출시 완료 미달 시 자동 종료, 위약금 없음.
+        충족 시 24개월 사업화기간으로 자동 전환(세부 수치는 종료 30일 전까지 부속합의서로 재확정)</li></ul>`},
+    {tag:"w", t:"제10조 (개량기술)",
+     d:`<ul><li><b class="x">"계약기간 이후" 삭제</b> — 종료 후 후속기술까지 자동 종속은 부당</li>
+        <li>"관계인" 한정 — "A가 별첨1 특허를 <b>직접 기초로 개발한</b>"으로 한정</li>
+        <li>A 소속 기관·학생·연구원의 독자 연구성과, 종료 후 개발 기술 제외</li>
+        <li>B가 개량기술 사업화 시 <b>별도 실시료 협의</b> 근거 추가</li></ul>`},
+    {tag:"d", t:"제11조 (비우회 및 경쟁제한) — 상호주의",
+     d:`제3항에 "<b>B 및 B의 임직원·특수관계인·계열사에도 동일 적용</b>" 추가.`},
+    {tag:"d", t:"제12조 (진술 및 보장)",
+     d:`4항: 식약처 규제 "<b class="x">보장</b>" → "<b class="o">성실 협력</b>"으로 완화. 최종 인허가 책임은 B.
+        + 숭실대 양도계약상 제한 확인 후 서명.`},
+    {tag:"d", t:"제13조 (비밀유지) — 학술 예외",
+     d:`"A의 <b>학술·연구 목적 논문 발표 및 학회 발표</b>는 영업비밀(원가·거래조건)을 제외하고 본 조의 제한을 받지 아니한다." 5년 기간은 유지.`},
+    {tag:"w", t:"★ 제14조 (지식재산권 표시 및 사용)",
+     d:`<ul><li>① 초상권·성명권 = 배원규 개인의 <b>사전 서면동의</b> 전제, 매체·지역·기간 특정, 사용 전 서면 승인, 허위·과장 표현 금지, 대가는 부속합의서</li>
+        <li>② 상표·IP는 A(또는 배원규) 귀속, License만 부여. 종료 시 즉시 사용 중단 + 재고 90일 소진</li>
+        <li>③ 호칭 가이드라인 — <span class="o">자연모사공학자 배원규 교수 ○</span> / <span class="x">숭실대학교 결합 ✕</span></li></ul>`},
+    {tag:"w", t:"★ 제15조 (계약기간 및 갱신)",
+     d:`기존 "체결일로부터 3년" → <b>1차 6개월 + 본계약 2년 자동전환</b>으로 전면 수정.
+        <ul><li>① 1차 6개월(출시 검증) → 본계약 24개월</li>
+        <li>② 미달 시 자동 종료, <b>위약금 없음</b></li>
+        <li>③ 전환 시 단가·MG만 부속합의서로 재확정, 25% 마진·독점권·초상권·상표 귀속 등 뼈대는 승계</li>
+        <li>④ 만료 3개월 전 통보 없으면 1년 자동연장 (MG 달성 조건부)</li></ul>
+        ※ 원문은 계약기간을 2년 → <b>3년으로 슬쩍 변경</b>했음 — 반드시 정정.`},
+    {tag:"d", t:"제16조 (계약위반·구제) — A의 즉시 해지사유 추가",
+     d:`<ul><li>MG 2개 연도 연속 미달</li><li>배원규 성명·초상의 무단 또는 왜곡 사용</li>
+        <li>마이크로젝션 상표 무단 사용</li><li>B의 허위·과대광고로 A 또는 배원규의 명예 훼손</li></ul>`},
+    {tag:"w", t:"제17조 (양도금지) — 비대칭 시정",
+     d:`원문: A는 양도 불가 / B는 계열사에 "통지만"으로 재위탁 가능.
+        <b>대칭화</b> — B의 계열사 재위탁·합병·주요 지분 변동도 <b>사전 서면동의</b> 필요.`},
+    {tag:"w", t:"말미 일방적 해석조항 — 반드시 삭제 ★",
+     d:`<div class="quote">원문: "본 계약의 문언 해석상 독점 범위에 의문이 있는 경우, <b>B의 독점적 사업권과 공급권을 최대한 보장하는 방향으로</b> 해석한다."</div>
+        <b>대체:</b> "본 계약의 해석은 <b>신의성실의 원칙과 양 당사자의 형평</b>에 따른다."`},
+    {tag:"k", t:"제18~19조 · 서명란",
+     d:`협의사항·준거법·관할 유지 (해외 판매 확대 시 KCAB 중재 검토).
+        서명란: 배랩 대표 <b>김수정</b>으로 정정 + <b>A-1(배원규 개인) 서명란 신설</b> + B 대표자 성명 정확 표기.`}
+  ]
+},
+{
+  id:"annexA", title:"📦 부속서 A — 후아가 작성·제출할 항목", open:false,
+  items:[
+    {tag:"c", t:"전담팀 — 사업총괄 · BM · 운영담당 (성명·직책·연락처) ★", d:"<b>데드라인: 14일</b>"},
+    {tag:"c", t:"투자 현황 — 패밀리링크 20억 진행 상태, JV 설립 여부", d:"<b>데드라인: 즉시</b>"},
+    {tag:"c", t:"브랜드 — 브랜드명, 컨셉, 포지셔닝, 로고/CI 방향", d:"<b>데드라인: 30일</b>"},
+    {tag:"c", t:"출시 일정 — 단계별 런칭 목표일 (가을 9월 타겟)", d:"<b>데드라인: 30일</b>"},
+    {tag:"c", t:"제품 라인업 — 1·2·3단계 제품 목록 및 출시 순서",
+     d:`<b>데드라인: 60일</b>
+        <ul><li>1단계 · 스피큘 크림 + 부스터 — 배랩 기존 레시피, 최단기</li>
+        <li>2단계 · 기본형 디바이스 세트 — 크레오 기존 모델 외형 수정</li>
+        <li>3단계 · 독사어금니 모사 디바이스 — 신규 금형, 6개월~1년, 브랜드 핵심</li></ul>
+        ※ 투자사·정문섭 대표는 크림보다 <b>디바이스</b>에 큰 매력 — 펀딩의 핵심 명분.`},
+    {tag:"c", t:"제품 상세 스펙 — 용량·제형·성분 방향·디바이스 사양", d:"<b>데드라인: 60일</b>"},
+    {tag:"c", t:"가격 정책 — 소비자가, 공급가(배랩→후아), 채널가", d:"<b>데드라인: 60일</b>"},
+    {tag:"c", t:"채널 전략 — 자사몰·오프라인·홈쇼핑 등 진입 채널·순서", d:"<b>데드라인: 60일</b>"},
+    {tag:"c", t:"마케팅 계획 — 셀럽, 콘텐츠, 광고 예산", d:"<b>데드라인: 60일</b>"},
+    {tag:"c", t:"패키지 — 용기·박스 컨셉 (1단계 크림 용기 수급 포함)", d:"<b>데드라인: 90일</b>"},
+    {tag:"c", t:"물량 계획 — 초도 물량, 6개월 예상 발주량", d:"<b>데드라인: 90일</b>"},
+    {tag:"d", t:"부속서 작성 시 협의 필요",
+     d:`<ul><li>품목별 공급단가 산정 (배랩 공급가 ↔ 후아 목표 소비자가)</li>
+        <li>1차 의무 발주 물량·금액</li><li>3단계 디바이스 금형비 분담 비율</li>
+        <li>마케팅 예산 분담</li>
+        <li><b>배랩은 제품 제조까지, 이후 판매·프로모션은 후아 책임</b> — 부속합의서에 명시</li></ul>`}
+  ]
+},
+{
+  id:"after", title:"✅ 회의 후 액션 · 리마인드", open:false,
+  items:[
+    {tag:"d", t:"회의 직후",
+     d:`<ul><li>회의 결과 정리 및 결정값 확정</li><li>계약서 v3 업데이트 (회의 결정 반영)</li>
+        <li>부속서 A 초안 작성 — 후아에게 채워달라고 요청할 양식</li></ul>`},
+    {tag:"w", t:"계약 체결 전",
+     d:`<ul><li><b>변호사 정식 자문</b> (기술이전·라이선싱 전문, 자문료 30~50만원)</li>
+        <li>숭실대 양도계약 조건 재확인</li><li>필요 시 MOU(독점협상 합의서) 선행 체결</li></ul>`},
+    {tag:"d", t:"계약 체결 후 (1차 6개월) 체크포인트",
+     d:`<ul><li>14일 — 후아 전담팀 지정 확인</li><li>30일 — 브랜드명 확정</li>
+        <li>60일 — 제품 스펙 확정</li><li>120일 — 1차 양산 발주 확인</li>
+        <li>180일 — 정식 출시 완료 확인 → 본계약 2년 자동 전환 여부 결정</li></ul>`},
+    {tag:"w", t:"⚠️ 협상 중 반드시 유지할 원칙 10",
+     d:`<ol><li>지분·JV·Exit 조항은 계약에 넣지 않음 (최종 판단)</li>
+        <li>제조원가 25% 마진 유지</li>
+        <li>핵심 구조 = 1차 6개월 + 본계약 2년 자동전환</li>
+        <li>금액보다 실행력(전담팀·마일스톤·출시 검증)</li>
+        <li>"자연모사공학자 배원규 교수"만 허용, "숭실대 교수" 금지</li>
+        <li>마이크로젝션 상표 = 배랩 소유 (License만)</li>
+        <li>배원규 개인은 A-1 공동 당사자</li>
+        <li>에스테틱·피부과 채널 배랩 100% 독자권 (사전 통지만)</li>
+        <li>개량기술은 별첨1 특허 직접 기초로만 한정</li>
+        <li>말미 일방적 해석조항 반드시 삭제</li></ol>`},
+    {tag:"c", t:"결정권자 분석 — 협상 태도 참고",
+     d:`하정인 팀장은 우호적 포지션(배랩의 지분 참여 요구도 먼저 제안). 실제 결정권자인 <b>정문섭 대표</b>는 조건이 다를 수 있음.
+        계약서 초안이 구두 합의(5억 MG, 얼굴·목 한정) 대비 크게 후퇴한 것은 정문섭 대표의 다른 포지션을 반영한 것일 가능성.`}
+  ]
+}
+];
+
+const TAGNAME = {d:"결정", c:"확인", w:"주의", k:"유지", s:"전략"};
+const KEY = "mj-meeting-v1";
+
+/* ---------- render ---------- */
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const app = document.getElementById("app");
+app.innerHTML = "";   // 내보낸 파일을 다시 열었을 때 중복 렌더링 방지
+
+DATA.forEach(sec=>{
+  const el = document.createElement("section");
+  el.className = "acc"; el.dataset.sec = sec.id;
+  if(sec.open) el.setAttribute("open","");
+  const rows = sec.items.map((it,i)=>{
+    const uid = sec.id + "-" + i;
+    const opts = (it.opts||[]).map(o=>
+      `<button class="opt" data-opt="${esc(o)}" onclick="pickOpt(this)">${esc(o)}</button>`).join("");
+    return `
+    <div class="item" data-uid="${uid}">
+      <div class="main">
+        <p class="it-t">${it.n?`<span class="no">${it.n}</span>`:""}<span class="tag ${it.tag}">${TAGNAME[it.tag]}</span>${it.t}</p>
+        ${it.d?`<div class="it-d">${it.d}</div>`:""}
+        ${it.rec?`<div class="rec">권고 · ${it.rec}</div>`:""}
+        ${opts?`<div class="opts">${opts}</div>`:""}
+      </div>
+      <div class="side">
+        <div class="status">
+          <button class="st" data-v="done" onclick="setStatus(this)">합의</button>
+          <button class="st" data-v="hold" onclick="setStatus(this)">보류</button>
+          <button class="st" data-v="re"   onclick="setStatus(this)">재검토</button>
+        </div>
+        <textarea placeholder="메모 · 상대 반응 · 합의 내용"></textarea>
+      </div>
+    </div>`;
+  }).join("");
+
+  el.innerHTML = `
+    <button class="head" onclick="toggle(this)">
+      <span class="chev">▶</span>
+      <span class="t">${sec.title}</span>
+      <span class="cnt" data-cnt>0 / ${sec.items.length}</span>
+    </button>
+    <div class="body">${rows}</div>`;
+  app.appendChild(el);
+});
+
+/* ---------- behaviour ---------- */
+function toggle(btn){
+  const s = btn.closest(".acc");
+  s.hasAttribute("open") ? s.removeAttribute("open") : s.setAttribute("open","");
+  s.querySelector(".body").style.display = s.hasAttribute("open") ? "" : "none";
+  save();
+}
+function allOpen(v){
+  document.querySelectorAll(".acc").forEach(s=>{
+    v ? s.setAttribute("open","") : s.removeAttribute("open");
+    s.querySelector(".body").style.display = v ? "" : "none";
+  });
+  save();
+}
+function setStatus(btn){
+  const box = btn.closest(".item");
+  const was = btn.classList.contains("on");
+  box.querySelectorAll(".st").forEach(b=>b.classList.remove("on"));
+  box.classList.remove("done","hold","re");
+  if(!was){ btn.classList.add("on"); box.classList.add(btn.dataset.v); }
+  refresh(); save();
+}
+function pickOpt(btn){
+  const wrap = btn.parentElement;
+  const was = btn.classList.contains("on");
+  wrap.querySelectorAll(".opt").forEach(b=>b.classList.remove("on"));
+  if(!was) btn.classList.add("on");
+  save();
+}
+
+function refresh(){
+  let done=0, hold=0, re=0;
+  const items = document.querySelectorAll(".item");
+  document.querySelectorAll(".acc").forEach(s=>{
+    const its = s.querySelectorAll(".item");
+    const d = s.querySelectorAll(".item.done").length;
+    s.querySelector("[data-cnt]").textContent = d + " / " + its.length;
+  });
+  done = document.querySelectorAll(".item.done").length;
+  hold = document.querySelectorAll(".item.hold").length;
+  re   = document.querySelectorAll(".item.re").length;
+  document.getElementById("stats").innerHTML =
+    `<span class="pill">전체 ${items.length}</span>
+     <span class="pill ok">합의 ${done}</span>
+     <span class="pill hold">보류 ${hold}</span>
+     <span class="pill re">재검토 ${re}</span>`;
+}
+
+/* ---------- persistence ---------- */
+let timer=null;
+function collect(){
+  const st = {global:document.getElementById("global").value, open:{}, items:{}};
+  document.querySelectorAll(".acc").forEach(s=> st.open[s.dataset.sec] = s.hasAttribute("open"));
+  document.querySelectorAll(".item").forEach(b=>{
+    const on = b.querySelector(".st.on"), op = b.querySelector(".opt.on");
+    const memo = b.querySelector("textarea").value;
+    if(on || op || memo) st.items[b.dataset.uid] = {s:on?on.dataset.v:"", o:op?op.dataset.opt:"", m:memo};
+  });
+  return st;
+}
+function apply(st){
+  if(!st) return;
+  if(st.global!=null) document.getElementById("global").value = st.global;
+  if(st.open) document.querySelectorAll(".acc").forEach(s=>{
+    const v = st.open[s.dataset.sec];
+    if(v===undefined) return;
+    v ? s.setAttribute("open","") : s.removeAttribute("open");
+    s.querySelector(".body").style.display = v ? "" : "none";
+  });
+  Object.entries(st.items||{}).forEach(([uid,v])=>{
+    const b = document.querySelector('.item[data-uid="'+uid+'"]'); if(!b) return;
+    if(v.s){ const t=b.querySelector('.st[data-v="'+v.s+'"]'); if(t){t.classList.add("on"); b.classList.add(v.s);} }
+    if(v.o){ b.querySelectorAll(".opt").forEach(o=>{ if(o.dataset.opt===v.o) o.classList.add("on"); }); }
+    if(v.m) b.querySelector("textarea").value = v.m;
+  });
+  refresh();
+}
+function save(){
+  clearTimeout(timer);
+  timer = setTimeout(()=>{
+    try{
+      localStorage.setItem(KEY, JSON.stringify(collect()));
+      const t = new Date();
+      document.getElementById("saved").textContent =
+        "저장됨 " + t.toTimeString().slice(0,8);
+    }catch(e){ document.getElementById("saved").textContent = "자동저장 불가 · HTML로 저장 사용"; }
+  }, 350);
+}
+document.addEventListener("input", e=>{ if(e.target.matches("textarea")) save(); });
+
+function resetAll(){
+  if(!confirm("모든 메모와 결정 상태를 지웁니다. 계속할까요?")) return;
+  try{ localStorage.removeItem(KEY); }catch(e){}
+  location.reload();
+}
+
+/* ---------- export ---------- */
+function exportHTML(){
+  const st = collect();
+  document.getElementById("snapshot").textContent = JSON.stringify(st);
+  // reflect live values into markup so the file is readable even without JS
+  document.querySelectorAll("textarea").forEach(t=>t.textContent = t.value);
+  const html = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+  document.querySelectorAll("textarea").forEach(t=>t.textContent = "");
+  const d = new Date();
+  const stamp = d.getFullYear() + ("0"+(d.getMonth()+1)).slice(-2) + ("0"+d.getDate()).slice(-2)
+              + "_" + ("0"+d.getHours()).slice(-2) + ("0"+d.getMinutes()).slice(-2);
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([html], {type:"text/html;charset=utf-8"}));
+  a.download = "Micro-Jection_회의록_" + stamp + ".html";
+  a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 4000);
+}
+
+/* ---------- boot ---------- */
+(function boot(){
+  document.querySelectorAll(".acc").forEach(s=>{
+    if(!s.hasAttribute("open")) s.querySelector(".body").style.display = "none";
+  });
+  let st = null;
+  try{ st = JSON.parse(localStorage.getItem(KEY)); }catch(e){}
+  if(!st){ try{ st = JSON.parse(document.getElementById("snapshot").textContent); }catch(e){} }
+  apply(st);
+  refresh();
+})();
+</script>
+</body>
+</html>
