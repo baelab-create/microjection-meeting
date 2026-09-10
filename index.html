@@ -174,13 +174,13 @@
 
 <main>
   <div class="memoboard">
-    <h2>🗒 회의 종합 메모</h2>
+    <h2>회의 종합 메모</h2>
     <textarea id="global" placeholder="전체 흐름, 합의 사항, 다음 액션을 여기에 기록합니다."></textarea>
   </div>
   <div id="app"></div>
   <div class="foot">
     이 브라우저에 자동 저장됩니다 · 회의 종료 후 <b>HTML로 저장</b>을 눌러 결과 파일을 보관하세요<br>
-    ⚖️ 최종 조항 확정은 양측 법률 검토를 거쳐 진행합니다
+    최종 조항 확정은 양측 법률 검토를 거쳐 진행합니다
   </div>
 </main>
 
@@ -192,7 +192,7 @@
    ========================================================= */
 const DATA = [
 {
-  id:"agenda", title:"📋 오늘 논의 안건", open:true,
+  id:"agenda", title:"오늘 논의 안건", open:true,
   items:[
     {tag:"s", t:"기준 자료 · 진행 방식",
      d:`<ul>
@@ -213,7 +213,7 @@ const DATA = [
   ]
 },
 {
-  id:"basic", title:"🏗 계약 기본구조 (1~5)", open:true,
+  id:"basic", title:"계약 기본구조 (1~5)", open:true,
   items:[
     {n:1, tag:"s", t:"계약 당사자 및 책임주체",
      d:`비범·후아·배랩 등 복수 법인이 사업·제조·판매에 참여 가능.
@@ -241,7 +241,7 @@ const DATA = [
   ]
 },
 {
-  id:"royalty", title:"💰 로열티 · 정산 (11, 12, 17, 18)", open:true,
+  id:"royalty", title:"로열티 · 정산 (11, 12, 17, 18)", open:true,
   items:[
     {n:11, tag:"k", t:"로열티 기본구조 및 지급",
      d:`비범 측 제안 구조를 배랩이 수용 — <b>합의</b>.
@@ -265,7 +265,7 @@ const DATA = [
   ]
 },
 {
-  id:"excl", title:"🌍 독점권 · 사업실적 (7, 8, 16)", open:false,
+  id:"excl", title:"독점권 · 사업실적 (7, 8, 16)", open:false,
   items:[
     {n:7, tag:"d", t:"제품·국가별 독점권 범위 및 발생조건",
      d:`<ul><li>독점권은 계약서에 <b>특정된 제품·브랜드</b>에 한함</li>
@@ -285,7 +285,7 @@ const DATA = [
   ]
 },
 {
-  id:"medical", title:"🩺 의료기기 (6, 14, 15)", open:false,
+  id:"medical", title:"의료기기 (6, 14, 15)", open:false,
   items:[
     {n:6, tag:"k", t:"의료기기 별도계약 원칙",
      d:`<ul><li>의료기기는 이번 화장품·홈뷰티 디바이스 계약의 독점판매 대상에서 <b>제외</b>하고 <b>별도 계약</b> — 큰 방향 양사 합의</li>
@@ -307,7 +307,7 @@ const DATA = [
   ]
 },
 {
-  id:"mfg", title:"🏭 제조 · 품질 (10, 20)", open:false,
+  id:"mfg", title:"제조 · 품질 (10, 20)", open:false,
   items:[
     {n:10, tag:"k", t:"Micro-Jection 적용 핵심제품 제조구조",
      d:`<ul><li>Micro-Jection 기술 적용 핵심제품은 <b>배랩 지정·승인 제조공장</b>에서 생산</li>
@@ -322,7 +322,7 @@ const DATA = [
   ]
 },
 {
-  id:"ip", title:"🧑‍🔬 IP · 상표 · 국가등록 (9, 21, 19)", open:false,
+  id:"ip", title:"IP · 상표 · 국가등록 (9, 21, 19)", open:false,
   items:[
     {n:9, tag:"d", t:"기술 · IP · 성명 · 초상 · 마케팅 자료 사용",
      d:`<ul><li>사용권은 <b>계약제품의 개발·판매·마케팅 목적</b>에 한정</li>
@@ -341,7 +341,7 @@ const DATA = [
   ]
 },
 {
-  id:"liab", title:"⚖️ 규제 · 책임 · 계약위반 (22, 13)", open:false,
+  id:"liab", title:"규제 · 책임 · 계약위반 (22, 13)", open:false,
   items:[
     {n:22, tag:"d", t:"국가별 규제 · 제품하자 · 리콜 · 보험",
      d:`<ul><li>판매·브랜딩을 수행하는 비범 측이 각 국가의 <b>표시·광고·제품등록·유통 규제 준수, 최종 생산품 검수, 유통 후 하자관리·고객대응·리콜</b>의 대외적 책임 부담</li>
@@ -356,7 +356,7 @@ const DATA = [
   ]
 },
 {
-  id:"term", title:"🔚 계약 종료 · 양도 · 지배권 변경 (23, 27)", open:false,
+  id:"term", title:"계약 종료 · 양도 · 지배권 변경 (23, 27)", open:false,
   items:[
     {n:23, tag:"s", t:"계약 종료 · 재고 소진 · IP 사용중단",
      d:`<ul><li>양사 서면 합의에 의한 정상 종료 + 중대한 위반 시 시정기간 후 해지 절차</li>
@@ -371,7 +371,7 @@ const DATA = [
   ]
 },
 {
-  id:"misc", title:"🔧 디바이스 · 데이터 · 비밀유지 (24, 25, 26)", open:false,
+  id:"misc", title:"디바이스 · 데이터 · 비밀유지 (24, 25, 26)", open:false,
   items:[
     {n:24, tag:"s", t:"홈뷰티 디바이스 — 금형 · CAD · 설계 · 시제품",
      d:`<ul><li>비범 측 전용으로 공동 개발된 Micro-Jection 관련 금형·CAD·설계도·시제품은 계약 종료 후 <b>어느 일방도 상대방 서면 동의 없이</b> 동일·유사 제3자 제품에 재사용·제공하지 않는 방향</li>
@@ -387,7 +387,7 @@ const DATA = [
   ]
 },
 {
-  id:"after", title:"✅ 다음 단계", open:false,
+  id:"after", title:"다음 단계", open:false,
   items:[
     {tag:"s", t:"회의 직후",
      d:`<ul><li>오늘 합의·조정 사항 정리 및 공유</li>
